@@ -3,3 +3,15 @@
 ################################################################################
 
 /.vs/ChatApplication/DesignTimeBuild
+/.vs/ChatApplication/v16
+/ApiCore/bin/Debug/net5.0
+/ApiCore/obj
+/ApiService/bin/Debug/net5.0
+/LogCore/bin/Debug/net5.0
+/ApiService/obj/Debug/net5.0
+/ApiService/obj
+/LogCore/obj
+/PluginCore/bin/Debug/net5.0
+/PluginCore/obj
+/WebSocketPlugins/bin/Debug/net5.0
+/WebSocketPlugins/obj
