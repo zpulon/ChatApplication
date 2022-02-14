@@ -10,10 +10,9 @@ namespace ApiService.DefaultService
     public class DefaultPluginConfigStorage : IPluginConfigStorage
     {
         protected ILogger Logger = LoggerManager.GetLogger("PluginConfigStorage");
-
         public Task<PluginMessage> DeleteConfig(string pluginId)
         {
-            PluginMessage r = new PluginMessage();
+            PluginMessage r = new();
             string cfgFile = GetConfigPath(pluginId);
             if (System.IO.File.Exists(cfgFile))
             {
@@ -33,7 +32,7 @@ namespace ApiService.DefaultService
 
         public Task<PluginMessage<TConfig>> GetConfig<TConfig>(string pluginId)
         {
-            PluginMessage<TConfig> r = new PluginMessage<TConfig>();
+            PluginMessage<TConfig> r = new();
             string cfgFile = GetConfigPath(pluginId);
             if (System.IO.File.Exists(cfgFile))
             {
@@ -59,7 +58,7 @@ namespace ApiService.DefaultService
 
         public Task<PluginMessage> SaveConfig<TConfig>(string pluginId, TConfig config)
         {
-            PluginMessage r = new PluginMessage();
+            PluginMessage r = new();
             string cfgFile = GetConfigPath(pluginId);
             if (config == null)
                 return Task.FromResult(r);
@@ -82,8 +81,6 @@ namespace ApiService.DefaultService
 
             return Task.FromResult(r);
         }
-
-
         protected virtual string GetConfigPath(string pluginId)
         {
             string path = System.IO.Path.Combine(AppContext.BaseDirectory, "PluginConfig");
@@ -91,7 +88,6 @@ namespace ApiService.DefaultService
             {
                 System.IO.Directory.CreateDirectory(path);
             }
-
             return System.IO.Path.Combine(path, (pluginId ?? "none") + ".json");
         }
     }

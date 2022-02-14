@@ -84,7 +84,7 @@ namespace ApiService
             applicationContext = services.AddPlugin( options =>
             {
                 options.ConnectionString = config["ConnectionStrings:DefaultConnection"];
-
+                options.AuthUrl = config["AuthUrl"];
             });
             services.AddSingleton<HttpRequestLogScopeMiddleware>();
             services.AddSocketManager();

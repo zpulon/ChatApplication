@@ -12,11 +12,8 @@ namespace ApiService.DefaultService
 	public class HttpRequestLogScopeMiddleware : IMiddleware
 	{
 		private readonly ILogger logger = LoggerManager.GetLogger("HttpRequestLogScopeMiddleware");
-
-
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
-			
 			Stopwatch sw = new();
 			sw.Start();
 			string url = context.Request.Path + "?" + context.Request.QueryString.Value;
@@ -35,9 +32,7 @@ namespace ApiService.DefaultService
 			Stream bodyStream = context.Response.Body;
             MemoryStream tempResponseBodyStream = new MemoryStream();
             context.Response.Body = tempResponseBodyStream;
-
 			await next(context);
-			
 				try
 				{
 					_ = 2;
@@ -62,7 +57,6 @@ namespace ApiService.DefaultService
 				{
 					await tempResponseBodyStream.CopyToAsync(bodyStream);
 				}
-			
 			sw.Stop();
 			logger.Log(LogLevels.Info, $"请求耗时：{sw.ElapsedMilliseconds}ms {context.Response?.StatusCode} {context.Request.Method} {url}");
 		}
