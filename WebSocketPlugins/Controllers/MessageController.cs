@@ -101,7 +101,11 @@ namespace WebSocketPlugins.Controllers
                 if (user == null)
                 {
                     user = await userManager.GetUserInfo(request.UserId);
-                    _memoryCache.Set(request.UserId, user);
+                    using var cacheEntry = _memoryCache.CreateEntry(request.UserId);
+                    {
+                        cacheEntry.Value = user;
+                        cacheEntry.AbsoluteExpiration = DateTime.Now + TimeSpan.FromMinutes(new Random().Next(50,70));
+                    }
                 }
                 double socre = await _ichatSessionService.SaveMessageAsync(request.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = request.UserId, Image = user.Image, Message = request.ChatMessage, WebSocketId = $"{request.ClassRoomId}_{request.UserId}", Name = user.Name });
                 response.Extension = socre;
