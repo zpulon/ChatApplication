@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <OutputPath>..\ApiService\bin\Debug\net5.0\Plugin\</OutputPath>
+        <DocumentationFile>..\ApiService\bin\Debug\net5.0\Plugin\TestPlugins.xml</DocumentationFile>
+        <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+</Project>

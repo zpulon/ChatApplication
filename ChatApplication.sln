@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginCore", "PluginCore\Pl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiCore", "ApiCore\ApiCore.csproj", "{B954A03A-47B8-46DD-A9C8-9F52976D24F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketPlugins", "WebSocketPlugins\WebSocketPlugins.csproj", "{81B62B9E-72E7-43DE-AE4B-15EC0DA34E11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSocketPlugins", "WebSocketPlugins\WebSocketPlugins.csproj", "{81B62B9E-72E7-43DE-AE4B-15EC0DA34E11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalrPlugins", "SignalrPlugins\SignalrPlugins.csproj", "{1BA965BA-C3C8-4695-B8CA-192FC879D5A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{81B62B9E-72E7-43DE-AE4B-15EC0DA34E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81B62B9E-72E7-43DE-AE4B-15EC0DA34E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81B62B9E-72E7-43DE-AE4B-15EC0DA34E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BA965BA-C3C8-4695-B8CA-192FC879D5A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BA965BA-C3C8-4695-B8CA-192FC879D5A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BA965BA-C3C8-4695-B8CA-192FC879D5A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BA965BA-C3C8-4695-B8CA-192FC879D5A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 		{56F7C961-82E9-46F0-BC88-68C93B96E789} = {5237F734-3C40-47F1-B7EC-1BD5F91F64E2}
 		{B954A03A-47B8-46DD-A9C8-9F52976D24F2} = {5237F734-3C40-47F1-B7EC-1BD5F91F64E2}
 		{81B62B9E-72E7-43DE-AE4B-15EC0DA34E11} = {71403E8F-26A0-4C2F-B9A0-6CCED164BCAA}
+		{1BA965BA-C3C8-4695-B8CA-192FC879D5A5} = {71403E8F-26A0-4C2F-B9A0-6CCED164BCAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4EFFDD37-B103-45B0-ADE7-2E1A8306B46A}
