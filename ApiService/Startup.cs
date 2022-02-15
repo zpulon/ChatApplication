@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.OpenApi.Models;
 using PluginCore.Basic;
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-
+using System.Threading.Tasks;
 
 namespace ApiService
 {
@@ -124,6 +126,53 @@ namespace ApiService
             }
             // 注入日志http
             services.AddUserDefined();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoreWebApi", Version = "v1" });
+                //按Http类型排序
+                c.OrderActionsBy(o => o.GroupName);
+
+                //Set the comments path for the swagger json and ui.
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var pluginPath = Path.Combine(basePath, "Plugin");
+                c.CustomSchemaIds(a => a.FullName);
+                //找到下面的所有xml文件
+                DirectoryInfo dir = new DirectoryInfo(pluginPath);
+                FileInfo[] fil = dir.GetFiles();
+                ////List<string> pluginsXMLPath = new List<string>();
+                foreach (var item in fil)
+                {
+                    //获取xml文件
+                    if (item.Name.EndsWith("Plugin.xml"))
+                        c.IncludeXmlComments(item.FullName);
+                }
+
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter the JWT Bearer token in format: Bearer {token}",
+                    Name = "authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+
+                };
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { securityScheme, new List<string>() }
+                };
+
+                c.AddSecurityDefinition("Bearer", securityScheme);
+                c.AddSecurityRequirement(securityRequirement);
+            })
+          .AddMvcCore()
+          .AddApiExplorer();
+           services.AddAutoMapper(assemblys);
             applicationContext.Init().Wait();
         }
 
@@ -142,8 +191,26 @@ namespace ApiService
               
             });
             applicationContext.InitApp().Wait();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoreWebApi");
+                options.RoutePrefix = string.Empty;
+            });
+            app.UseAuthentication();
+            app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(options =>
+            {
+                options.AllowAnyHeader();
+                options.AllowAnyMethod();
+                //options.AllowAnyOrigin();
+                options.SetIsOriginAllowed(c => true);
+                options.AllowCredentials();
+            });
 
+
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
