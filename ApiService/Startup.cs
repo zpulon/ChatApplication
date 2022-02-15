@@ -1,8 +1,7 @@
 using ApiCore.JsonFilter;
 using ApiCore.Utils;
 using ApiService.DefaultService;
-using ApiService.Handlers;
-using ApiService.SocketsManager;
+using AspNet.Security.OAuth.Validation;
 using LogCore.Filters;
 using LogCore.Log;
 using Microsoft.AspNetCore.Builder;
@@ -21,7 +20,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 
 namespace ApiService
@@ -81,6 +79,28 @@ namespace ApiService
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Local;
             });
+            services.AddCors();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddJwtBearer(OAuthValidationDefaults.AuthenticationScheme, options =>
+            {
+                options.Authority = config["AuthUrl"];
+                options.RequireHttpsMetadata = false;
+                options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+                {
+                    OnAuthenticationFailed = (context) =>
+                    {
+                        var msg = context.Exception;
+                        //throw msg;
+                        return Task.CompletedTask;
+                    }
+                };
+                //注册应用的AppName值
+                options.Audience = config["Audience"];
+            });
             applicationContext = services.AddPlugin( options =>
             {
                 options.ConnectionString = config["ConnectionStrings:DefaultConnection"];
@@ -121,19 +141,6 @@ namespace ApiService
             {
               
             });
-            //var apppart = serviceProvider.GetService<IServiceCollection>().FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;
-            //var assemblys = new List<Assembly>() { Assembly.GetExecutingAssembly() };
-            //if (apppart != null)
-            //{
-            //    ApplicationPartManager apm = apppart as ApplicationPartManager;
-            //    //所有附件程序集
-            //    PluginCoreContextImpl ac = PluginCoreContext.Current as PluginCoreContextImpl;
-            //    ac.AdditionalAssembly.ForEach((a) =>
-            //    {
-            //        assemblys.Add(a);
-            //        apm.ApplicationParts.Add(new AssemblyPart(a));
-            //    });
-            //}
             applicationContext.InitApp().Wait();
             app.UseRouting();
 

@@ -62,7 +62,6 @@ namespace WebSocketPlugins.Plugin
 #endif
             });
             context.Services.AddTransient<ConnectionManager>();
-            // context.Services.AddSingleton(typeof(SocketHandler));
             context.Services.AddSingleton<WebSocketMessageHandler>();
             context.Services.AddSingleton<SocketHandler>();
             context.Services.AddScoped<IChatSessionService, ChatSessionService>();
