@@ -17,6 +17,7 @@ namespace PluginCore.Interface
 
 
         Task<bool> Init(PluginCoreContext context);
+        Task<bool> InitApp(PluginCoreContext context);
 
         Task<bool> Start(PluginCoreContext context);
 

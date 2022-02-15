@@ -24,6 +24,10 @@ namespace PluginCore.Plugin
             {
                 this.InitFail = fail;
             }
+            public void SetInitAppFail(bool fail)
+            {
+                this.InitAppFail = fail;
+            }
             public void SetStartFail(bool fail)
             {
                 this.StartFail = fail;
@@ -170,7 +174,26 @@ namespace PluginCore.Plugin
             }
             return true;
         }
-
+        public async Task<bool> InitApp(PluginCoreContext context)
+        {
+            foreach (PluginInfo pi in PluginList)
+            {
+                try
+                {
+                    var r = await pi.Instance.InitApp(context);
+                    pi.SetInitAppFail(r.Code != "0");
+                    pi.SetMessage(r.Message);
+                    //Logger.Debug("plugin {0} init {1} {2}", pi.Name, r.Code, r.Message ?? "");
+                }
+                catch (Exception e)
+                {
+                    //Logger.Error("plugin {0} init error \r\n{1}", pi.Name, e.ToString());
+                    pi.SetInitAppFail(true);
+                    pi.SetMessage(e.Message);
+                }
+            }
+            return true;
+        }
         public async Task<bool> Start(PluginCoreContext context)
         {
             foreach (PluginInfo pi in PluginList)

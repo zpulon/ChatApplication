@@ -1,12 +1,12 @@
-﻿using ApiService.SocketsManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using WebSocketPlugins.SocketsManager;
 
-namespace ApiService.Handlers
+namespace WebSocketPlugins.Handlers
 {
     /// <summary>
     /// 

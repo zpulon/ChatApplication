@@ -15,6 +15,7 @@ namespace PluginCore.Plugin
         public bool IsRunning { get; protected set; }
 
         public bool InitFail { get; protected set; }
+        public bool InitAppFail { get; protected set; }
 
         public bool StartFail { get; protected set; }
 

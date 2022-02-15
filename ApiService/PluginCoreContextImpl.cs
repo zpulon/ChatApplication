@@ -18,6 +18,11 @@ namespace ApiService
             var impl = new PluginCoreContextImpl(services, action);
             return impl;
         }
+        public static PluginCoreContextImpl AddPlugin(this IApplicationBuilder app, IServiceProvider serviceProvider, Action<PluginCoreContextImpl> action)
+        {
+            var impl = new PluginCoreContextImpl(app, serviceProvider, action);
+            return impl;
+        }
     }
 
     public class PluginCoreContextImpl : PluginCoreContext
@@ -47,6 +52,32 @@ namespace ApiService
 
             Services = serviceCollection;
         }
+        public PluginCoreContextImpl(IApplicationBuilder app, IServiceProvider serviceProvider, Action<PluginCoreContextImpl> action)
+           : base(app, serviceProvider)
+        {
+            string pluginConfigPath = System.IO.Path.Combine(AppContext.BaseDirectory, "PluginConfig");
+            if (!System.IO.Directory.Exists(pluginConfigPath))
+            {
+                System.IO.Directory.CreateDirectory(pluginConfigPath);
+            }
+            string pluginPath = System.IO.Path.Combine(AppContext.BaseDirectory, "Plugin");
+            if (!System.IO.Directory.Exists(pluginPath))
+            {
+                System.IO.Directory.CreateDirectory(pluginPath);
+            }
+            //所有程序集
+            DirectoryLoader dl = new DirectoryLoader();
+            List<Assembly> assList = new List<Assembly>();
+            var psl = dl.LoadFromDirectory(pluginPath);
+            assList.AddRange(psl);
+            AdditionalAssembly = assList;
+
+            if (action == null) throw new ArgumentNullException(nameof(action));
+            action(this);
+
+            ApplicationBuilder = app;
+            ServiceProvider = serviceProvider;
+        }
         public async override Task<bool> Init()
         {
             try
@@ -74,7 +105,33 @@ namespace ApiService
                 return false;
             }
         }
+        public async override Task<bool> InitApp()
+        {
+            try
+            {
 
+                await base.InitApp();
+                string pluginPath = System.IO.Path.Combine(AppContext.BaseDirectory, "Plugin");
+                PluginConfigStorage = new DefaultPluginConfigStorage();
+                PluginFactory = new DefaultPluginFactory();
+
+                PluginFactory.Load(pluginPath);
+                var result = await PluginFactory.InitApp(this);
+                ApplicationBuilder = this.ApplicationBuilder;
+                ServiceProvider = this.ServiceProvider;
+                return result;
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                Console.WriteLine("初始化失败：\r\n{0}", ex.ToString());
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("初始化失败：\r\n{0}", ex.ToString());
+                return false;
+            }
+        }
         public async override Task<bool> Start()
         {
             await PluginFactory.Start(this);

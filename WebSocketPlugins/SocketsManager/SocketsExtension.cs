@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System.Reflection;
 
-namespace ApiService.SocketsManager
+namespace WebSocketPlugins.SocketsManager
 {
     /// <summary>
     /// 

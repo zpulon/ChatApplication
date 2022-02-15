@@ -7,9 +7,14 @@ using WebSocketPlugins.Stores;
 using ApiCore.Basic;
 using WebSocketPlugins.Model;
 using Microsoft.EntityFrameworkCore;
+using WebSocketPlugins.SocketsManager;
+using WebSocketPlugins.Handlers;
 
 namespace WebSocketPlugins.Plugin
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Plugin : PluginBase
     {
         /// <summary>
@@ -56,10 +61,24 @@ namespace WebSocketPlugins.Plugin
                 options.UseLoggerFactory(new EFLoggerFactory());
 #endif
             });
+            context.Services.AddTransient<ConnectionManager>();
+            // context.Services.AddSingleton(typeof(SocketHandler));
+            context.Services.AddSingleton<WebSocketMessageHandler>();
+            context.Services.AddSingleton<SocketHandler>();
             context.Services.AddScoped<IChatSessionService, ChatSessionService>();
             context.Services.AddScoped<IUserStores, UserStores>();
 
             return base.Init(context);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<PluginMessage> InitApp(PluginCoreContext context)
+        {
+            context.ApplicationBuilder.MapSocket("/websocket/chat", context.ServiceProvider.GetService<WebSocketMessageHandler>());
+            return base.InitApp(context);
         }
         /// <summary>
         /// 

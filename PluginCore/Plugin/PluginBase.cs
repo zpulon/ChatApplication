@@ -23,6 +23,10 @@ namespace PluginCore.Plugin
         {
             return Task.FromResult(new PluginMessage());
         }
+        public virtual Task<PluginMessage> InitApp(PluginCoreContext context)
+        {
+            return Task.FromResult(new PluginMessage());
+        }
         public virtual Task<PluginMessage> Start(PluginCoreContext context)
         {
             return Task.FromResult(new PluginMessage());

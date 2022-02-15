@@ -87,7 +87,7 @@ namespace ApiService
                 options.AuthUrl = config["AuthUrl"];
             });
             services.AddSingleton<HttpRequestLogScopeMiddleware>();
-            services.AddSocketManager();
+           
 
             var apppart = services.FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;
             var assemblys = new List<Assembly>() { Assembly.GetExecutingAssembly() };
@@ -116,8 +116,25 @@ namespace ApiService
                 app.UseDeveloperExceptionPage();
             }
             app.UseWebSockets();
-      
-            app.MapSocket("/websocket/chat", serviceProvider.GetService<WebSocketMessageHandler>());
+
+            applicationContext = app.AddPlugin(serviceProvider,options =>
+            {
+              
+            });
+            //var apppart = serviceProvider.GetService<IServiceCollection>().FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;
+            //var assemblys = new List<Assembly>() { Assembly.GetExecutingAssembly() };
+            //if (apppart != null)
+            //{
+            //    ApplicationPartManager apm = apppart as ApplicationPartManager;
+            //    //所有附件程序集
+            //    PluginCoreContextImpl ac = PluginCoreContext.Current as PluginCoreContextImpl;
+            //    ac.AdditionalAssembly.ForEach((a) =>
+            //    {
+            //        assemblys.Add(a);
+            //        apm.ApplicationParts.Add(new AssemblyPart(a));
+            //    });
+            //}
+            applicationContext.InitApp().Wait();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

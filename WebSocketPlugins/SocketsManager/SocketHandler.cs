@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApiService.SocketsManager
+namespace WebSocketPlugins.SocketsManager
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class SocketHandler
+    public /*abstract*/ class SocketHandler
     {
 
 
@@ -112,7 +112,10 @@ namespace ApiService.SocketsManager
         /// <param name="result"></param>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        public abstract Task Receive(WebSocket socket, string classRoomId, string userId, WebSocketReceiveResult result, byte[] buffer);
+        public virtual Task Receive(WebSocket socket, string classRoomId, string userId, WebSocketReceiveResult result, byte[] buffer)
+        {
+            throw new Exception();
+        }
 
 
     }

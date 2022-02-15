@@ -52,7 +52,12 @@ namespace PluginCore.Basic
             Services = serviceContainer;
 
         }
-
+        public PluginCoreContext(IApplicationBuilder app, IServiceProvider serviceProvider)
+        {
+            Current = this;
+            ApplicationBuilder = app;
+            ServiceProvider = serviceProvider;
+        }
 
 
 
@@ -60,7 +65,10 @@ namespace PluginCore.Basic
         {
             return true;
         }
-
+        public async virtual Task<bool> InitApp()
+        {
+            return true;
+        }
         public async virtual Task<bool> Start()
         {
             return true;

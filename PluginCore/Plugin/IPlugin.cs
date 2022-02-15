@@ -15,6 +15,7 @@ namespace PluginCore.Plugin
 
 
         Task<PluginMessage> Init(PluginCoreContext context);
+        Task<PluginMessage> InitApp(PluginCoreContext context);
 
         Task<PluginMessage> Start(PluginCoreContext context);
 
