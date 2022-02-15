@@ -44,9 +44,9 @@ namespace WebSocketPlugins.Controllers
         /// </summary>
         /// <param name="request">用户信息</param>
         /// <returns></returns>
-        [HttpPost("list")]
+        [HttpGet("list")]
         [AuthorizationLocal]
-        public async Task<PagingResponseMessage<RedisMessage>> GetMessageList([FromBody] ChatRequest request)
+        public async Task<PagingResponseMessage<RedisMessage>> GetMessageList([FromQuery] ChatRequest request)
         {
             PagingResponseMessage<RedisMessage> response = new();
             try
@@ -86,15 +86,15 @@ namespace WebSocketPlugins.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpGet("save")]
+        [HttpPost("save")]
         [AuthorizationLocal]
-        public async Task<ResponseMessage<double>> SaveMessage([FromQuery] SaveMessageRequest request)
+        public async Task<ResponseMessage<double>> SaveMessage([FromBody] SaveMessageRequest request)
         {
             ResponseMessage<double> response = new();
             try
             {
-                var user =await userManager.GetUserInfo(request.UserId);
-                double socre = await _ichatSessionService.SaveMessageAsync(request.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = request.UserId, Image = user.image, Message = request.ChatMessage, WebSocketId = $"{request.ClassRoomId}_{request.UserId}", Name = user.name });
+                var (name, image) = await userManager.GetUserInfo(request.UserId);
+                double socre = await _ichatSessionService.SaveMessageAsync(request.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = request.UserId, Image = image, Message = request.ChatMessage, WebSocketId = $"{request.ClassRoomId}_{request.UserId}", Name = name });
                 response.Extension = socre;
             }
             catch (Exception)

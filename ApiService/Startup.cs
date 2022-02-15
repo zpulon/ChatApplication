@@ -2,12 +2,14 @@ using ApiCore.JsonFilter;
 using ApiCore.Utils;
 using ApiService.DefaultService;
 using AspNet.Security.OAuth.Validation;
+using CSRedis;
 using LogCore.Filters;
 using LogCore.Log;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -108,9 +110,11 @@ namespace ApiService
                 options.ConnectionString = config["ConnectionStrings:DefaultConnection"];
                 options.AuthUrl = config["AuthUrl"];
             });
+            string redisConnectionString = $@"{config["Redis:Connection"]},password={config["Redis:Password"]},defaultDatabase ={config["Redis:DefaultDB"]} ";
+            //≥ı ºªØ RedisHelper
+            RedisHelper.Initialization(new CSRedisClient(redisConnectionString));
+            services.AddSingleton<IDistributedCache>(new Microsoft.Extensions.Caching.Redis.CSRedisCache(RedisHelper.Instance));
             services.AddSingleton<HttpRequestLogScopeMiddleware>();
-           
-
             var apppart = services.FirstOrDefault(x => x.ServiceType == typeof(ApplicationPartManager))?.ImplementationInstance;
             var assemblys = new List<Assembly>() { Assembly.GetExecutingAssembly() };
             if (apppart != null)
@@ -190,7 +194,7 @@ namespace ApiService
             {
               
             });
-            applicationContext.InitApp().Wait();
+            
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -204,7 +208,6 @@ namespace ApiService
             {
                 options.AllowAnyHeader();
                 options.AllowAnyMethod();
-                //options.AllowAnyOrigin();
                 options.SetIsOriginAllowed(c => true);
                 options.AllowCredentials();
             });
@@ -213,11 +216,11 @@ namespace ApiService
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Check}/{action=Index}/{id?}");
             });
+            applicationContext.InitApp().Wait();
         }
     }
 }
