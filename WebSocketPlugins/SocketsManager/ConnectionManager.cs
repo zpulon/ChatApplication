@@ -118,7 +118,7 @@ namespace WebSocketPlugins.SocketsManager
         /// </summary>
         /// <param name="classRoomId"></param>
         /// <returns></returns>
-        public static async Task<long> GetClassRoomByIdAsync(string classRoomId)
+        public  async Task<long> GetClassRoomByIdAsync(string classRoomId)
         {
             long number = 0;
             await Task.Run(() => {

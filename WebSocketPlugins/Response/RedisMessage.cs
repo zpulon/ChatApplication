@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WebSocketPlugins.Basic;
 
-namespace WebSocketPlugins.Basic
+namespace WebSocketPlugins.Response
 {
     /// <summary>
     /// 
@@ -15,13 +12,6 @@ namespace WebSocketPlugins.Basic
         /// 
         /// </summary>
         public string Id { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long UserId { get; set; }
-        /// 
-        /// </summary>
-        public string Image { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -38,5 +28,13 @@ namespace WebSocketPlugins.Basic
         /// 消息
         /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public long UserId { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Image { get; set; }
     }
 }
