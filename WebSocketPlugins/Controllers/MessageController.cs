@@ -58,9 +58,10 @@ namespace WebSocketPlugins.Controllers
                 response.TotalCount = (int)await _ichatSessionService.GetMessageCount(request.ClassRoomId);
                 response.Extension = await _ichatSessionService.GetMessageList(request.ClassRoomId, request.PageIndex, request.PageSize, request.desc);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                response.Message = e.Message;
+                response.Code =ResponseCodeDefines.ServiceError;
             }
             return response;
         }
@@ -78,10 +79,10 @@ namespace WebSocketPlugins.Controllers
             {
                 response.Extension = await _ichatSessionService.GetMessageAsync<RedisMessage>(request.ClassRoomId, request.Score);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                response.Message = e.Message;
+                response.Code = ResponseCodeDefines.ServiceError;
             }
             return response;
         }
@@ -110,10 +111,10 @@ namespace WebSocketPlugins.Controllers
                 double socre = await _ichatSessionService.SaveMessageAsync(request.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = request.UserId, Image = user.Image, Message = request.ChatMessage, WebSocketId = $"{request.ClassRoomId}_{request.UserId}", Name = user.Name });
                 response.Extension = socre;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                response.Message = e.Message;
+                response.Code = ResponseCodeDefines.ServiceError;
             }
             return response;
         }
@@ -131,10 +132,10 @@ namespace WebSocketPlugins.Controllers
             {
                 await Task.Run(async () => { response.Extension = await _connections.GetClassRoomByIdAsync(classroomid);});
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                response.Message = e.Message;
+                response.Code = ResponseCodeDefines.ServiceError;
             }
             return response;
         }
