@@ -122,7 +122,7 @@ namespace WebSocketPlugins.Controllers
         /// </summary>
         /// <param name="classroomid">教室标识</param>
         /// <returns></returns>
-        [HttpGet("number")]
+        [HttpGet("chat/number")]
         [AuthorizationLocal]
         public async Task<ResponseMessage<long>> GetClassRoomNumber([FromQuery] string classroomid)
         {
