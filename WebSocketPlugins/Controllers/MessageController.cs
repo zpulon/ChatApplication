@@ -3,6 +3,7 @@ using ApiCore.Filters;
 using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Threading.Tasks;
 using WebSocketPlugins.Basic;
@@ -10,6 +11,7 @@ using WebSocketPlugins.Manager;
 using WebSocketPlugins.Request;
 using WebSocketPlugins.Response;
 using WebSocketPlugins.SocketsManager;
+using static WebSocketPlugins.Manager.UserManager;
 
 namespace WebSocketPlugins.Controllers
 {
@@ -22,6 +24,7 @@ namespace WebSocketPlugins.Controllers
     public class MessageController : BaseController
     {
         private readonly IChatSessionService _ichatSessionService;
+        private readonly IMemoryCache _memoryCache;
         private readonly UserManager userManager;
         /// <summary>
         /// 
@@ -33,11 +36,12 @@ namespace WebSocketPlugins.Controllers
         /// <param name="ichatSessionService"></param>
         /// <param name="connections"></param>
         /// <param name="userManager"></param>
-        public MessageController(IChatSessionService ichatSessionService, ConnectionManager connections, UserManager userManager)
+        public MessageController(IChatSessionService ichatSessionService, ConnectionManager connections, UserManager userManager, IMemoryCache memoryCache)
         {
             _ichatSessionService = ichatSessionService;
             _connections = connections;
             this.userManager = userManager;
+            _memoryCache = memoryCache;
         }
         /// <summary>
         /// 进入直播间到redis 获取信息
@@ -93,8 +97,13 @@ namespace WebSocketPlugins.Controllers
             ResponseMessage<double> response = new();
             try
             {
-                var (name, image) = await userManager.GetUserInfo(request.UserId);
-                double socre = await _ichatSessionService.SaveMessageAsync(request.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = request.UserId, Image = image, Message = request.ChatMessage, WebSocketId = $"{request.ClassRoomId}_{request.UserId}", Name = name });
+                _memoryCache.TryGetValue(request.UserId,out UserCache user);
+                if (user == null)
+                {
+                    user = await userManager.GetUserInfo(request.UserId);
+                    _memoryCache.Set(request.UserId, user);
+                }
+                double socre = await _ichatSessionService.SaveMessageAsync(request.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = request.UserId, Image = user.Image, Message = request.ChatMessage, WebSocketId = $"{request.ClassRoomId}_{request.UserId}", Name = user.Name });
                 response.Extension = socre;
             }
             catch (Exception)

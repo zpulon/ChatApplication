@@ -26,10 +26,14 @@ namespace WebSocketPlugins.Manager
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<(string name, string image)> GetUserInfo(long userId)
+        public async Task<UserCache> GetUserInfo(long userId)
         {
             var user = await _userStores.GetAsync(z => z.Id == userId);
-            return (user.Name, user.Image);
+            return new UserCache( user.Name, user.Image);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public record UserCache(string Name ,string Image);
     }
 }

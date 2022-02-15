@@ -83,6 +83,7 @@ namespace ApiService
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Local;
             });
+            services.AddMemoryCache();
             services.AddCors();
             services.AddAuthentication(options =>
             {
