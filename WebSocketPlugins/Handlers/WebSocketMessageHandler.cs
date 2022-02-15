@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using WebSocketPlugins.Basic;
 using WebSocketPlugins.SocketsManager;
 
 namespace WebSocketPlugins.Handlers
@@ -57,28 +59,19 @@ namespace WebSocketPlugins.Handlers
             if (redisMessage == "ping")
             {
                 //心跳不保存数据
-                //int messageType = Convert.ToInt32(ChatEnum.ToSelf);
-                //string message = $"{{\"type\":{messageType}}}";
-                //byte[] bufferMessgae = Encoding.UTF8.GetBytes(message);
-                ////await SendMessageToSelf($"{{\"type\":{messageType}}}", classRoomId, userId);
-                //await socket.SendAsync(new ArraySegment<byte>(bufferMessgae, 0, bufferMessgae.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                int messageType = Convert.ToInt32(ChatEnum.ToSelf);
+                string message = $"{{\"type\":{messageType}}}";
+                byte[] bufferMessgae = Encoding.UTF8.GetBytes(message);
+                await socket.SendAsync(new ArraySegment<byte>(bufferMessgae, 0, bufferMessgae.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 
             }
             else
             {
-                //int messageType = Convert.ToInt32(ChatEnum.SingleRef);
-                //var userIdL = Convert.ToInt64(userId);
-                //var user = await userStores.GetAsync(z => z.Id == userIdL);
-                //if (user == null)
-                //    return;
-                //double socre = await _ichatSessionService.SaveMessageAsync(classRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = Convert.ToInt64(userId), Image = user.Image, Message = redisMessage, WebSocketId = $"{classRoomId}_{userId}", Name = user.Name });
-                //await SendMessageToAll($"{{\"type\":{messageType},\"score\":{socre}}} ", classRoomId);
+                int messageType = Convert.ToInt32(ChatEnum.SingleRef);
+                double.TryParse(redisMessage, out double socre);
+                await SendMessageToAll($"{{\"type\":{messageType},\"score\":{socre}}} ", classRoomId);
             }
 
         }
-
-
-
-
     }
 }

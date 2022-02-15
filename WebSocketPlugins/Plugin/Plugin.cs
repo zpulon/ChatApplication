@@ -9,6 +9,7 @@ using WebSocketPlugins.Model;
 using Microsoft.EntityFrameworkCore;
 using WebSocketPlugins.SocketsManager;
 using WebSocketPlugins.Handlers;
+using WebSocketPlugins.Manager;
 
 namespace WebSocketPlugins.Plugin
 {
@@ -65,6 +66,7 @@ namespace WebSocketPlugins.Plugin
             context.Services.AddSingleton<WebSocketMessageHandler>();
             context.Services.AddSingleton<SocketHandler>();
             context.Services.AddScoped<IChatSessionService, ChatSessionService>();
+            context.Services.AddScoped<UserManager>(); 
             context.Services.AddScoped<IUserStores, UserStores>();
 
             return base.Init(context);
