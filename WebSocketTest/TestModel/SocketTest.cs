@@ -23,13 +23,13 @@ namespace WebSocketTest.TestModel
             _userManager = _testBase.ServiceProvider.GetRequiredService<UserManager>();
             _chatSessionService = _testBase.ServiceProvider.GetRequiredService<IChatSessionService>();
         }
-        [Fact(DisplayName = "用户测试")]
+        [Fact(DisplayName = "用户测试", Timeout = 2000)]
         public async void TestGetUserList()
         {
             var result = await _userManager.GetUserInfo(222);
             Assert.True(string.Compare(result.Name,"邹平", StringComparison.OrdinalIgnoreCase)==0, "是否查询成功");
         }
-        [Fact(DisplayName = "消息列表测试")]
+        [Fact(DisplayName = "消息列表测试", Timeout = 2000)]
         public async void TestGetMessageList()
         {
             var result = await _chatSessionService.GetMessageList("111", 1, 10, true);
@@ -37,7 +37,7 @@ namespace WebSocketTest.TestModel
             Assert.True(resultTotleCount > 0, "是否查询成功");
             Assert.True(result.Count>0, "是否查询成功");
         }
-        [Fact(DisplayName = "保存消息测试")]
+        [Fact(DisplayName = "保存消息测试", Timeout = 2000)]
         public async void TestPostSaveMessage()
         {
             SaveMessageRequest saveMessage = new()
@@ -51,7 +51,7 @@ namespace WebSocketTest.TestModel
             double socre = await _chatSessionService.SaveMessageAsync(saveMessage.ClassRoomId, new RedisMessage { Id = Guid.NewGuid().ToString(), UserId = saveMessage.UserId, Image = user.Image, Message = saveMessage.ChatMessage, WebSocketId = $"{saveMessage.ClassRoomId}_{saveMessage.UserId}", Name = user.Name });
             Assert.True(socre > 0, "保存成功");
         }
-        [Fact(DisplayName = "单条消息测试")]
+        [Fact(DisplayName = "单条消息测试",Timeout =2000)]
         public async void TestGetSingleMessage()
         {
             MessageRequest request = new()
