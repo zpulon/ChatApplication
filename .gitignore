@@ -17,3 +17,5 @@
 /WebSocketPlugins/obj
 /.vs/ChatApplication/config
 /SignalrPlugins/obj
+/WebSocketTest/bin/Debug/net5.0
+/WebSocketTest/obj
