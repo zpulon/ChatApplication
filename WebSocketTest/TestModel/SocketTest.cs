@@ -37,7 +37,7 @@ namespace WebSocketTest.TestModel
             Assert.True(resultTotleCount > 0, "是否查询成功");
             Assert.True(result.Count>0, "是否查询成功");
         }
-        [Fact(DisplayName = "保存消息")]
+        [Fact(DisplayName = "保存消息测试")]
         public async void TestPostSaveMessage()
         {
             SaveMessageRequest saveMessage = new()
