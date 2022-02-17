@@ -43,7 +43,7 @@ namespace ApiCore.JsonFilter
 			{
 				if (result.Kind == DateTimeKind.Unspecified)
 				{
-					result = ((_defualtDateTimeKing == DateTimeKind.Utc) ? result.ToUniversalTime() : result.ToLocalTime());
+					result = (_defualtDateTimeKing == DateTimeKind.Utc) ? result.ToUniversalTime() : result.ToLocalTime();
 					return _dateProc[_dateTimeZoneHandling](result);
 				}
 				return result;

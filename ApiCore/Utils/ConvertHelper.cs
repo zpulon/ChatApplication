@@ -7,7 +7,7 @@ namespace ApiCore.Utils
     {
         public class UnixTimestamp
         {
-            private static readonly DateTime BEGIN_DATE = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            private static readonly DateTime BEGIN_DATE = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
             public static long FromDateTime(DateTime t, bool ms = false)
             {

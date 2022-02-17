@@ -27,10 +27,10 @@ namespace ApiCore.Utils
             {
                 if (string.IsNullOrEmpty(text)) return text;
 
-                byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
-                byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(text);
+                byte[] keyArray = Encoding.UTF8.GetBytes(key);
+                byte[] toEncryptArray = Encoding.UTF8.GetBytes(text);
 
-                RijndaelManaged rDel = new RijndaelManaged();
+                RijndaelManaged rDel = new();
                 rDel.Key = keyArray;
                 rDel.Mode = CipherMode.ECB;
                 rDel.Padding = PaddingMode.PKCS7;
@@ -59,24 +59,24 @@ namespace ApiCore.Utils
             /// <returns>明文</returns>
             public string Decrypt(string ciphertext, string key)
             {
-                var res = string.Empty;
                 if (string.IsNullOrEmpty(ciphertext))
                 {
                     return ciphertext;
                 }
+                string res;
                 try
                 {
-                    byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
+                    byte[] keyArray = Encoding.UTF8.GetBytes(key);
                     byte[] toEncryptArray = Convert.FromBase64String(ciphertext);
 
-                    RijndaelManaged rDel = new RijndaelManaged();
+                    RijndaelManaged rDel = new();
                     rDel.Key = keyArray;
                     rDel.Mode = CipherMode.ECB;
                     rDel.Padding = PaddingMode.PKCS7;
 
                     ICryptoTransform cTransform = rDel.CreateDecryptor();
                     byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-                    res = UTF8Encoding.UTF8.GetString(resultArray);
+                    res = Encoding.UTF8.GetString(resultArray);
                 }
                 catch
                 {

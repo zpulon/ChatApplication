@@ -10,8 +10,8 @@ namespace LogCore.Log
 
 		protected override void Write(LogEventInfo logEvent)
 		{
-			LogEntity logEntity = new LogEntity
-			{
+			LogEntity logEntity = new()
+            {
 				Logger = logEvent.LoggerName,
 				LogLevel = logEvent.Level.Name,
 				LogTime = logEvent.TimeStamp,

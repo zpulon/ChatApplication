@@ -42,7 +42,7 @@ namespace PluginCore.Plugin
             }
         }
 
-        protected List<PluginInfo> PluginList = new List<PluginInfo>();
+        protected List<PluginInfo> PluginList = new();
 
         public List<Assembly> LoadedAssembly { get; }
 
@@ -135,7 +135,7 @@ namespace PluginCore.Plugin
             PluginInfo pi = PluginList.FirstOrDefault(x => x.ID == pluginId);
             if (pi != null)
             {
-                PluginItem p = new PluginItem();
+                PluginItem p = new();
                 p.CopyFrom(pi, secret);
                 return p;
             }

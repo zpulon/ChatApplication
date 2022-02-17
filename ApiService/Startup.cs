@@ -142,7 +142,7 @@ namespace ApiService
                 var pluginPath = Path.Combine(basePath, "Plugin");
                 c.CustomSchemaIds(a => a.FullName);
                 //找到下面的所有xml文件
-                DirectoryInfo dir = new DirectoryInfo(pluginPath);
+                DirectoryInfo dir = new(pluginPath);
                 FileInfo[] fil = dir.GetFiles();
                 ////List<string> pluginsXMLPath = new List<string>();
                 foreach (var item in fil)

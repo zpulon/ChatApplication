@@ -138,11 +138,10 @@ namespace LogCore.Log
 				fileTarget.ArchiveNumbering = ArchiveNumberingMode.Sequence;
 			}
 			fileTarget.EnableArchiveFileCompression = config.ZipArchiveFile ?? false;
-			FileArchivePeriod fileArchivePeriod = FileArchivePeriod.None;
-			try
-			{
-				fileArchivePeriod = (fileTarget.ArchiveEvery = (FileArchivePeriod)Enum.Parse(typeof(FileArchivePeriod), config.ArchiveEvery ?? "", ignoreCase: false));
-				return fileTarget;
+            try
+            {
+                FileArchivePeriod fileArchivePeriod = (fileTarget.ArchiveEvery = (FileArchivePeriod)Enum.Parse(typeof(FileArchivePeriod), config.ArchiveEvery ?? "", ignoreCase: false));
+                return fileTarget;
 			}
 			catch
 			{

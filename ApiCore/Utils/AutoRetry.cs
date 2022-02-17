@@ -14,13 +14,13 @@ namespace ApiCore.Utils
             TResponse r = null;
             for (int i = 1; i <= retryCount; i++)
             {
-                bool isOk = true;
+                bool isOk;
                 try
                 {
                     r = await proc();
                     isOk = r.Code == ResponseCodeDefines.SuccessCode;
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //Logger.Error("execute proc error....{0}\r\n{1}", r == null ? "" : (r.Message ?? ""), e.ToString());
                     isOk = false;
@@ -50,13 +50,13 @@ namespace ApiCore.Utils
             bool r = false;
             for (int i = 1; i <= retryCount; i++)
             {
-                bool isOk = true;
+                bool isOk;
                 try
                 {
                     r = await proc();
                     isOk = r;
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //Logger.Error("execute proc error....{0}\r\n{1}", r, e.ToString());
                     isOk = false;

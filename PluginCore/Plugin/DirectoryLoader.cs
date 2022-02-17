@@ -31,7 +31,7 @@ namespace PluginCore.Plugin
                     Assembly assembly = Assembly.LoadFrom(file);
                     assemblyList.Add(assembly);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     //Logger.Error("can not load service:{0}\r\n{1}", file, e.ToString());
                 }
