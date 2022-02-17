@@ -22,8 +22,6 @@ namespace WebSocketPlugins.Handlers
         /// 
         /// </summary>
         /// <param name="connection"></param>
-        /// <param name="_chatSessionService"></param>
-        /// <param name="userService"></param>
         public WebSocketMessageHandler(ConnectionManager connection) : base(connection)
         {
 
@@ -34,7 +32,6 @@ namespace WebSocketPlugins.Handlers
         /// <param name="socket"></param>
         /// <param name="classRoomId"></param>
         /// <param name="userId"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
         public override async Task OnConnected(WebSocket socket, string classRoomId, string userId)
         {
@@ -49,7 +46,6 @@ namespace WebSocketPlugins.Handlers
         /// <param name="socket"></param>
         /// <param name="classRoomId"></param>
         /// <param name="userId"></param>
-        /// <param name="name"></param>
         /// <param name="result"></param>
         /// <param name="buffer"></param>
         /// <returns></returns>

@@ -34,7 +34,6 @@ namespace WebSocketPlugins.SocketsManager
         /// <param name="socket"></param>
         /// <param name="userId"></param>
         /// <param name="classRoomId"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
         public virtual async Task OnConnected(WebSocket socket, string classRoomId, string userId)
         {

@@ -11,24 +11,6 @@ namespace WebSocketPlugins.SocketsManager
     /// </summary>
     public static class SocketsExtension
     {
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddSocketManager(this IServiceCollection services)
-        {
-            services.AddTransient<ConnectionManager>();
-            foreach (var type in Assembly.GetEntryAssembly().ExportedTypes)
-            {
-                if (type.GetTypeInfo().BaseType == typeof(SocketHandler))
-                {
-                    services.AddSingleton(type);
-                }
-            }
-            return services;
-        }
         /// <summary>
         /// 
         /// </summary>

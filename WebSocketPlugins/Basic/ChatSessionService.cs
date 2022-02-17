@@ -8,10 +8,19 @@ using WebSocketPlugins.Response;
 
 namespace WebSocketPlugins.Basic
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ChatSessionService : IChatSessionService
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public IJsonHelper _jsonHelper;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jsonHelper"></param>
         public ChatSessionService(IJsonHelper jsonHelper)
         {
             _jsonHelper = jsonHelper;
@@ -26,12 +35,13 @@ namespace WebSocketPlugins.Basic
         /// <returns></returns>
         public async Task<T> GetMessageAsync<T>(string classRoomId, double score)
         {
-            //var result = await _redis.SortedSetRangeByScoreAsync($"{CommonConstant.CHAT_COMMON_PREFIX}{classRoomId}", score, score, Exclude.None, Order.Descending, 0, 1);
-
-            var result = RedisHelper.ZRangeByScore<T>($"{CommonConstant.CHAT_COMMON_PREFIX}{classRoomId}",Convert.ToInt64(score), Convert.ToInt64(score) + 1, 1).FirstOrDefault();
+            T result = default;
+            await Task.Run(() =>
+            {
+                 result = RedisHelper.ZRangeByScore<T>($"{CommonConstant.CHAT_COMMON_PREFIX}{classRoomId}", Convert.ToInt64(score), Convert.ToInt64(score) + 1, 1).FirstOrDefault();
+                
+            });
             return result;
-            //return _jsonHelper.ToObject<T>(result[0]);
-
         }
         /// <summary>
         /// 
@@ -65,7 +75,11 @@ namespace WebSocketPlugins.Basic
             });
             return result;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="classRoomId"></param>
+        /// <returns></returns>
         public async Task<long> GetMessageCount(string classRoomId)
         {
             long count = 0;
